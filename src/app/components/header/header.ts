@@ -1,18 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { LoginComponent } from '../login/login';
+import { LoginComponent,  } from '../login/login';
+import { RegisterComponent } from '../register/register';
 import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../services/auth';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, LoginComponent],
+  imports: [CommonModule, LoginComponent, RegisterComponent],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
 export class Header {
   @ViewChild('loginModal') loginModal!: LoginComponent;
-  
+  @ViewChild('registerModal') registerModal!: RegisterComponent;
   constructor(public authService: AuthService){}
 
   logout(){
@@ -24,7 +25,7 @@ export class Header {
   }
 
   openRegisterModal(){
-    alert('Aqui vocês farão a modal de Registro');
+   this.registerModal.open();
   }
 
   onSwitchToLogin(): void {

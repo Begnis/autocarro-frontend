@@ -2,31 +2,33 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../modal/modal';
-import { AuthService, LoginRequest } from '../../services/auth';
+import { AuthService, RegisterRequest } from '../../services/auth';
 import { Subscriber } from 'rxjs';
 
+
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [CommonModule, FormsModule, ModalComponent],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './register.html',
+  styleUrl: './register.css',
 })
-export class LoginComponent {
+
+export class RegisterComponent{
   @Input() isOpen: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() switchRegister = new EventEmitter<void>();
 
-  loginData: LoginRequest = {
-    email: '',
-    password: '',
-  }
-
   isLoading: boolean = false;
   errorMessage: string = '';
+ 
+constructor(private authService: AuthService){}
 
+registerData: RegisterRequest = {
+  email: '',
+  password: '',
+  nome: '',
+  }
 
-  constructor(private authService: AuthService){}
-  
   open(): void {
     this.isOpen = true;
     this.resetForm();
@@ -38,9 +40,9 @@ export class LoginComponent {
     this.resetForm();
   }
 
-  onSubmit(): void {
-    if(!this.loginData.email || !this.loginData.password){
-      console.log('entrou')
+onSubmit(): void {
+    if(!this.registerData.email || !this.registerData.password || !this.registerData.nome){
+      console.log('Registrou')
       this.errorMessage = "Por favor, preencha todos os campos.";
       return;
     }
@@ -49,7 +51,7 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.login(this.loginData).subscribe({
+    this.authService.register(this.registerData).subscribe({
       next: (response) => {
         this.authService.setAuthData(response);
         console.log(response);
@@ -65,12 +67,25 @@ export class LoginComponent {
 
   }
 
+
   resetForm(): void {
     this.errorMessage = '';
     this.isLoading = false;
-    this.loginData = {
+    this.registerData = {
       email: '',
-      password: '',      
-    }    
+      password: '',
+      nome:'',      
+    }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
